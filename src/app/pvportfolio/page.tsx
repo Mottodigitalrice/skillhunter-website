@@ -5,7 +5,7 @@ import { Trophy, Lock, Play, Star } from "lucide-react";
 const featuredWork = {
   id: "hilton-kyoto",
   title: "Hilton Kyoto — Opening Promotion Film",
-  youtubeId: "PLACEHOLDER_HILTON_KYOTO",
+  youtubeId: "zUoRkmIbu08",
   awards: [
     "優秀賞 — Tourism Services / Japan Competition (JWTFF Maniwa 2025)",
     "ART&CRAFT Award — International Competition (JWTFF Maniwa 2025)",
@@ -28,12 +28,24 @@ const awardVideos = [
     title: "Award-Winning Film",
     youtubeId: "PLACEHOLDER_2",
     awards: ["Award Name — Competition 2024"],
+    certificates: [
+      {
+        src: "/images/pvportfolio/jwtff-2026-finalist-international.png",
+        label: "Finalist — International Competition (JWTFF Koka 2026)",
+      },
+    ],
   },
   {
     id: "award-3",
     title: "Award-Winning Film",
     youtubeId: "PLACEHOLDER_3",
     awards: ["Award Name — Competition 2024"],
+    certificates: [
+      {
+        src: "/images/pvportfolio/jwtff-2026-official-selection-international.png",
+        label: "Official Selection — International Competition (JWTFF Koka 2026)",
+      },
+    ],
   },
 ];
 
@@ -67,7 +79,7 @@ function VideoThumbnail({
     ? null
     : `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
 
-  return (
+  const inner = (
     <div
       className="relative w-full overflow-hidden rounded-xl bg-[#16213e] group cursor-pointer"
       style={{ aspectRatio }}
@@ -93,6 +105,14 @@ function VideoThumbnail({
       </div>
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#c9a03c]" />
     </div>
+  );
+
+  if (isPlaceholder) return inner;
+
+  return (
+    <a href={`https://www.youtube.com/watch?v=${youtubeId}`} target="_blank" rel="noopener noreferrer" className="block">
+      {inner}
+    </a>
   );
 }
 
@@ -232,17 +252,34 @@ export default function PvPortfolioPage() {
                 <VideoThumbnail youtubeId={video.youtubeId} title={video.title} />
                 <div className="mt-5">
                   <h3 className="text-lg font-bold text-white">{video.title}</h3>
-                  <div className="mt-3 space-y-2">
-                    {video.awards.map((award) => (
-                      <div
-                        key={award}
-                        className="flex items-start gap-3 rounded-lg border border-[#c9a03c]/20 bg-[#16213e] px-4 py-3"
-                      >
-                        <Trophy className="size-4 text-[#c9a03c] shrink-0 mt-0.5" />
-                        <span className="text-sm text-white/80">{award}</span>
-                      </div>
-                    ))}
-                  </div>
+                  {video.certificates && video.certificates.length > 0 ? (
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      {video.certificates.map((cert) => (
+                        <div key={cert.label} className="flex flex-col items-center gap-2">
+                          <div className="w-full rounded-xl bg-white p-3 shadow-lg">
+                            <img
+                              src={cert.src}
+                              alt={cert.label}
+                              className="w-full h-auto object-contain"
+                            />
+                          </div>
+                          <p className="text-xs text-white/40 text-center leading-snug">{cert.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="mt-3 space-y-2">
+                      {video.awards.map((award) => (
+                        <div
+                          key={award}
+                          className="flex items-start gap-3 rounded-lg border border-[#c9a03c]/20 bg-[#16213e] px-4 py-3"
+                        >
+                          <Trophy className="size-4 text-[#c9a03c] shrink-0 mt-0.5" />
+                          <span className="text-sm text-white/80">{award}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
